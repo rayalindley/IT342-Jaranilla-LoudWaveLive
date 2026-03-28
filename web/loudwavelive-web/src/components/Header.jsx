@@ -1,6 +1,9 @@
+import MainLayout from "../layouts/MainLayout";
+import { Link } from "react-router-dom";
+
 function Header() {
   return (
-    <header className="header">
+    <header>
       <div className="left">
         <img src="/logo.png" alt="LoudWave Live Logo" className="logo" />
         <Link to="/">LoudWave Live</Link>
@@ -11,7 +14,7 @@ function Header() {
       </div>
 
       <div className="right">
-        {!isLoggedIn ? (
+        {!MainLayout.isLoggedIn ? (
             <>
               <Link to="/login">Login</Link>
               <Link to="/register">Register</Link>
