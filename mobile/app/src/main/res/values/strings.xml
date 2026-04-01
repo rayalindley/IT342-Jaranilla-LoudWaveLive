@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">loudwavelive-mobile</string>
+    <string name="app_name">LoudWave Live</string>
+    <string name="home">Home</string>
+    <string name="events">Events</string>
+    <string name="my_tickets">My Tickets</string>
+    <string name="profile">Profile</string>
 </resources>

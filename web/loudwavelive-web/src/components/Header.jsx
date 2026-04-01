@@ -1,16 +1,18 @@
 import MainLayout from "../layouts/MainLayout";
 import { Link } from "react-router-dom";
+import logo from "../images/loudwavelive-logo.png";
+import "../index.css";
 
 function Header() {
   return (
     <header>
       <div className="left">
-        <img src="/logo.png" alt="LoudWave Live Logo" className="logo" />
+        <img src={logo} alt="LoudWave Live Logo" className="logo"/>
         <Link to="/">LoudWave Live</Link>
       </div>
 
       <div className="center">
-        <input type="text" placeholder="Search concerts, artists, venues..." />
+        <input type="text" placeholder="Search concerts, artists, venues..." className="searchbar"/>
       </div>
 
       <div className="right">
