@@ -2,6 +2,7 @@ package edu.cit.jaranilla.loudwavelive.service;
 import edu.cit.jaranilla.loudwavelive.dto.LoginRequest;
 import edu.cit.jaranilla.loudwavelive.dto.RegisterRequest;
 import edu.cit.jaranilla.loudwavelive.entity.User;
+import edu.cit.jaranilla.loudwavelive.factory.UserFactory;
 import edu.cit.jaranilla.loudwavelive.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,19 +13,14 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final UserFactory userFactory;
 
     public User register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already registered");
         }
 
-        User user = User.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
-                .build();
+        User user = userFactory.createUser(request);
 
         return userRepository.save(user);
     }
