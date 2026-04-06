@@ -1,4 +1,6 @@
 package com.example.loudwavelive_mobile.model
 
-class UserUI {
-}
+data class UserUI (
+    val displayName: String,
+    val email: String,
+)

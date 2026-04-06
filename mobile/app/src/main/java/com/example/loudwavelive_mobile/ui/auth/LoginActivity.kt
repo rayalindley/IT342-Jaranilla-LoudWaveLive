@@ -12,8 +12,11 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.loudwavelive_mobile.R
+import com.example.loudwavelive_mobile.adapter.UserAdapter
 import com.example.loudwavelive_mobile.api.RetrofitClient
 import com.example.loudwavelive_mobile.model.LoginRequest
+import com.example.loudwavelive_mobile.model.UserResponse
+import com.example.loudwavelive_mobile.model.UserUI
 import com.example.loudwavelive_mobile.ui.home.HomeActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -43,10 +46,14 @@ class LoginActivity : AppCompatActivity() {
             )
 
             RetrofitClient.instance.login(request)
-                .enqueue(object : Callback<Void> {
-                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        if(response.isSuccessful) {
-                            showSuccessSheet()
+                .enqueue(object : Callback<UserResponse> {
+                    override fun onResponse(
+                        call: Call<UserResponse>,
+                        response: Response<UserResponse>
+                    ) {
+                        if(response.isSuccessful && response.body()!=null) {
+                            val uiUser = UserAdapter.fromApi(response.body()!!)
+                            showSuccessSheet(uiUser)
                         } else {
                             btnLogin.isEnabled = true
                             btnLogin.text = "Sign in"
@@ -57,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
 
-                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                    override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                         btnLogin.isEnabled = true
                         btnLogin.text = "Sign in"
                         Snackbar.make(rootView, "Network error. Check your connection.", Snackbar.LENGTH_LONG)
@@ -69,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun showSuccessSheet() {
+    private fun showSuccessSheet(uiUser: UserUI) {
         val dialog = BottomSheetDialog(this, R.style.SuccessBottomSheetTheme)
         val sheetView = LayoutInflater.from(this)
             .inflate(R.layout.bottom_sheet_login_success, null)
@@ -81,6 +88,13 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, HomeActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
+
+            Toast.makeText(
+                this@LoginActivity,
+                "Welcome ${uiUser.displayName}",
+                Toast.LENGTH_SHORT
+            ).show()
+
             startActivity(intent)
             finish()
         }, 2500)
