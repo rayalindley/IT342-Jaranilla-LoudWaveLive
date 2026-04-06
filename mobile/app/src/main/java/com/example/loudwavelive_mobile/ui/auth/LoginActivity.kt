@@ -17,6 +17,7 @@ import com.example.loudwavelive_mobile.api.RetrofitClient
 import com.example.loudwavelive_mobile.model.LoginRequest
 import com.example.loudwavelive_mobile.model.UserResponse
 import com.example.loudwavelive_mobile.model.UserUI
+import com.example.loudwavelive_mobile.session.SessionManager
 import com.example.loudwavelive_mobile.ui.home.HomeActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -53,6 +54,7 @@ class LoginActivity : AppCompatActivity() {
                     ) {
                         if(response.isSuccessful && response.body()!=null) {
                             val uiUser = UserAdapter.fromApi(response.body()!!)
+                            SessionManager.isLoggedIn = true
                             showSuccessSheet(uiUser)
                         } else {
                             btnLogin.isEnabled = true
