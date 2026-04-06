@@ -12,6 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.loudwavelive_mobile.R
 import com.example.loudwavelive_mobile.api.RetrofitClient
 import com.example.loudwavelive_mobile.model.RegisterRequest
+import com.example.loudwavelive_mobile.model.UserResponse
+import com.example.loudwavelive_mobile.validation.EmailValidation
+import com.example.loudwavelive_mobile.validation.PasswordValidation
+import com.example.loudwavelive_mobile.validation.ValidationStrategy
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
@@ -39,6 +43,9 @@ class RegisterActivity : AppCompatActivity() {
         val btnRegister      = findViewById<Button>(R.id.btnRegister)
         val rootView         = findViewById<View>(android.R.id.content)
 
+        val emailValidator: ValidationStrategy = EmailValidation()
+        val passwordValidator: ValidationStrategy = PasswordValidation()
+
         btnRegister.setOnClickListener {
             tilFirstName.error   = null
             tilLastName.error    = null
@@ -53,42 +60,29 @@ class RegisterActivity : AppCompatActivity() {
             val confirmPass = etConfirmPass.text.toString()
 
             var hasError = false
-            if (first.isEmpty()) {
-                tilFirstName.error = "Required"
-                hasError = true
-            }
-            if (last.isEmpty()) {
-                tilLastName.error = "Required"
-                hasError = true
-            }
-            if (userEmail.isEmpty()) {
-                tilEmail.error = "Required"
-                hasError = true
-            }
-            if (pass.isEmpty()) {
-                tilPassword.error = "Required"
-                hasError = true
-            }
-            if (confirmPass.isEmpty()) {
-                tilConfirmPass.error = "Required"
-                hasError = true
-            }
+            if (first.isEmpty()) { tilFirstName.error = "Required"; hasError = true }
+            if (last.isEmpty()) { tilLastName.error = "Required"; hasError = true }
+            if (userEmail.isEmpty()) { tilEmail.error = "Required"; hasError = true }
+            if (pass.isEmpty()) { tilPassword.error = "Required"; hasError = true }
+            if (confirmPass.isEmpty()) { tilConfirmPass.error = "Required"; hasError = true }
             if (hasError) return@setOnClickListener
 
-            if (pass != confirmPass) {
-                tilConfirmPass.error = "Passwords do not match"
-                return@setOnClickListener
-            }
+            if (!emailValidator.validate(userEmail)) { tilEmail.error = "Invalid email"; hasError = true }
+            if (!passwordValidator.validate(pass)) { tilPassword.error = "Password must be at least 6 characters"; hasError = true }
+            if (pass != confirmPass) { tilConfirmPass.error = "Passwords do not match"; hasError = true }
+            if (hasError) return@setOnClickListener
+
+            val request = RegisterRequest(first, last, userEmail, pass)
 
             btnRegister.isEnabled = false
             btnRegister.text = "Creating account..."
 
-            val request = RegisterRequest(first, last, userEmail, pass)
-
             RetrofitClient.instance.register(request)
-                .enqueue(object : Callback<Void> {
-
-                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                .enqueue(object : Callback<UserResponse> {
+                    override fun onResponse(
+                        call: Call<UserResponse>,
+                        response: Response<UserResponse>
+                    ) {
                         if (response.isSuccessful) {
                             showSuccessSheet()
                         } else {
@@ -101,7 +95,7 @@ class RegisterActivity : AppCompatActivity() {
                         }
                     }
 
-                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                    override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                         btnRegister.isEnabled = true
                         btnRegister.text = "Create Account"
                         Snackbar.make(rootView, "Network error. Check your connection.", Snackbar.LENGTH_LONG)
