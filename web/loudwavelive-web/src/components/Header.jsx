@@ -4,6 +4,8 @@ import logo from "../images/loudwavelive-logo.png";
 import "../index.css";
 
 function Header() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
   return (
     <header>
       <div className="left">
@@ -16,18 +18,25 @@ function Header() {
       </div>
 
       <div className="right">
-        {!MainLayout.isLoggedIn ? (
-            <>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
-            </>
+        {!user ? (
+          <>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Register</Link>
+          </>
         ) : (
-            <>
-              <Link to="/dashboard"> Events </Link>
-              <Link to="/dashboard"> My Tickets </Link>
-              <span> notif </span>
-              <span> profile </span>
-            </>
+          <>
+            <Link to="/events">Events</Link>
+            <Link to="/mytickets">My Tickets</Link>
+
+            <button
+              onClick={() => {
+                localStorage.removeItem("user");
+                window.location.href = "/";
+              }}
+            >
+              Logout
+            </button>
+          </>
         )}
       </div>
 

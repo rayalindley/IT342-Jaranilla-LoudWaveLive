@@ -16,8 +16,10 @@ function Login() {
         { email, password }
       )
 
+      localStorage.setItem("user", JSON.stringify(res.data));
       alert("Login successful!")
       console.log(res.data)
+      window.location.href = "/";
     } catch (error) {
       alert("Invalid credentials")
       console.error(error)

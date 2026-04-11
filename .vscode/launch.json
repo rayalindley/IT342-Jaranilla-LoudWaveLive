@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-LoudwaveliveApplication<loudwavelive>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "edu.cit.jaranilla.loudwavelive.LoudwaveliveApplication",
+            "projectName": "loudwavelive",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
