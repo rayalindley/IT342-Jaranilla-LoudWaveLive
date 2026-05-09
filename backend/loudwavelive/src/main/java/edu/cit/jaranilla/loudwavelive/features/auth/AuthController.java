@@ -1,8 +1,4 @@
-package edu.cit.jaranilla.loudwavelive.controller;
-import edu.cit.jaranilla.loudwavelive.dto.LoginRequest;
-import edu.cit.jaranilla.loudwavelive.dto.RegisterRequest;
-import edu.cit.jaranilla.loudwavelive.entity.User;
-import edu.cit.jaranilla.loudwavelive.facade.AuthFacade;
+package edu.cit.jaranilla.loudwavelive.features.auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

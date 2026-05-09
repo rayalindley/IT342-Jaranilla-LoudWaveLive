@@ -1,5 +1,4 @@
-package edu.cit.jaranilla.loudwavelive.repository;
-import edu.cit.jaranilla.loudwavelive.entity.User;
+package edu.cit.jaranilla.loudwavelive.features.auth;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 import java.util.UUID;

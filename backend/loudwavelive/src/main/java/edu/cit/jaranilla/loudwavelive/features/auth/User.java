@@ -1,4 +1,4 @@
-package edu.cit.jaranilla.loudwavelive.entity;
+package edu.cit.jaranilla.loudwavelive.features.auth;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.UUID;

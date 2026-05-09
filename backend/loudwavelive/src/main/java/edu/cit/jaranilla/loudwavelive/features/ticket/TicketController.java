@@ -1,4 +1,4 @@
-package edu.cit.jaranilla.loudwavelive.controller;
+package edu.cit.jaranilla.loudwavelive.features.ticket;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import edu.cit.jaranilla.loudwavelive.repository.TicketRepository;
-import edu.cit.jaranilla.loudwavelive.entity.Ticket;
 
 
 @RestController

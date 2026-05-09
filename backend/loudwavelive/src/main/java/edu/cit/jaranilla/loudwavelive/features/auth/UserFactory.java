@@ -1,6 +1,4 @@
-package edu.cit.jaranilla.loudwavelive.factory;
-import edu.cit.jaranilla.loudwavelive.dto.RegisterRequest;
-import edu.cit.jaranilla.loudwavelive.entity.User;
+package edu.cit.jaranilla.loudwavelive.features.auth;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 

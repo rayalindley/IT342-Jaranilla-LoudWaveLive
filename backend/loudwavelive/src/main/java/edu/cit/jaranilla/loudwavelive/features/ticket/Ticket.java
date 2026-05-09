@@ -1,4 +1,4 @@
-package edu.cit.jaranilla.loudwavelive.entity;
+package edu.cit.jaranilla.loudwavelive.features.ticket;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;

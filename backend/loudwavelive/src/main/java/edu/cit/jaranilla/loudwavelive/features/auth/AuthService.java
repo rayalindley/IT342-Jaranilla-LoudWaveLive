@@ -1,9 +1,4 @@
-package edu.cit.jaranilla.loudwavelive.service;
-import edu.cit.jaranilla.loudwavelive.dto.LoginRequest;
-import edu.cit.jaranilla.loudwavelive.dto.RegisterRequest;
-import edu.cit.jaranilla.loudwavelive.entity.User;
-import edu.cit.jaranilla.loudwavelive.factory.UserFactory;
-import edu.cit.jaranilla.loudwavelive.repository.UserRepository;
+package edu.cit.jaranilla.loudwavelive.features.auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

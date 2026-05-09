@@ -1,4 +1,4 @@
-package edu.cit.jaranilla.loudwavelive.dto;
+package edu.cit.jaranilla.loudwavelive.features.auth;
 import lombok.Data;
 
 @Data
