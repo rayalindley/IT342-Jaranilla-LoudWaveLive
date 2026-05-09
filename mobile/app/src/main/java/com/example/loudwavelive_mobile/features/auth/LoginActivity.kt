@@ -1,4 +1,4 @@
-package com.example.loudwavelive_mobile.ui.auth
+package com.example.loudwavelive_mobile.features.auth
 
 import android.content.Intent
 import android.graphics.Color
@@ -13,12 +13,12 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.loudwavelive_mobile.R
 import com.example.loudwavelive_mobile.adapter.UserAdapter
-import com.example.loudwavelive_mobile.api.RetrofitClient
+import com.example.loudwavelive_mobile.core.api.RetrofitClient
 import com.example.loudwavelive_mobile.model.LoginRequest
 import com.example.loudwavelive_mobile.model.UserResponse
 import com.example.loudwavelive_mobile.model.UserUI
-import com.example.loudwavelive_mobile.session.SessionManager
-import com.example.loudwavelive_mobile.ui.home.HomeActivity
+import com.example.loudwavelive_mobile.core.session.SessionManager
+import com.example.loudwavelive_mobile.features.home.HomeActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call

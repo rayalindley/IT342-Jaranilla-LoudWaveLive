@@ -1,11 +1,11 @@
-package com.example.loudwavelive_mobile.ui.home
+package com.example.loudwavelive_mobile.features.home
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.loudwavelive_mobile.R
-import com.example.loudwavelive_mobile.session.SessionManager
+import com.example.loudwavelive_mobile.core.session.SessionManager
 
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

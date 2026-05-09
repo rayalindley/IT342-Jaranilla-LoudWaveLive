@@ -1,4 +1,4 @@
-package com.example.loudwavelive_mobile.session
+package com.example.loudwavelive_mobile.core.session
 
 object SessionManager {
     private val observers = mutableListOf<(Boolean) -> Unit>()

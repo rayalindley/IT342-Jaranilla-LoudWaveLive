@@ -1,4 +1,4 @@
-package com.example.loudwavelive_mobile.api
+package com.example.loudwavelive_mobile.core.api
 import com.example.loudwavelive_mobile.model.LoginRequest
 import com.example.loudwavelive_mobile.model.RegisterRequest
 import com.example.loudwavelive_mobile.model.UserResponse

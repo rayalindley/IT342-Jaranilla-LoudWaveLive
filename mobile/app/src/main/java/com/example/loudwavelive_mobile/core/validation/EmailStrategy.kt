@@ -1,4 +1,4 @@
-package com.example.loudwavelive_mobile.validation
+package com.example.loudwavelive_mobile.core.validation
 
 class EmailValidation : ValidationStrategy {
     override fun validate(input: String): Boolean {

@@ -1,4 +1,4 @@
-package com.example.loudwavelive_mobile.validation
+package com.example.loudwavelive_mobile.core.validation
 
 interface ValidationStrategy {
     fun validate(input: String): Boolean

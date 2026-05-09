@@ -1,4 +1,4 @@
-package com.example.loudwavelive_mobile.api
+package com.example.loudwavelive_mobile.core.api
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0D0D0D"
-    tools:context=".ui.auth.LoginActivity">
+    tools:context=".features.auth.LoginActivity">
 
     <ScrollView
         android:layout_width="0dp"
