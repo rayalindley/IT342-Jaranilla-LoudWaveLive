@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "../index.css";
-import MainLayout from "../layouts/MainLayout";
+import "../../index.css";
+import MainLayout from "../../shared/layouts/MainLayout";
 
 function MyTickets() {
   const [tickets, setTickets] = useState([]);

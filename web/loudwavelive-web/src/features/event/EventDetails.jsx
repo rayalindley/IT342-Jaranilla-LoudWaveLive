@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import MainLayout from "../../shared/layouts/MainLayout";
-import "../index.css"
+import "../../index.css"
 
 function EventDetails() {
     const { id } = useParams();
