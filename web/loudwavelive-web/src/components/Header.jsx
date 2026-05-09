@@ -1,7 +1,7 @@
 import MainLayout from "../layouts/MainLayout";
 import { Link } from "react-router-dom";
 import logo from "../images/loudwavelive-logo.png";
-import "../index.css";
+import "../../index.css"
 
 function Header() {
   return (

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import axios from "axios"
-import '../index.css'
-import logo from '../images/loudwavelive-logo.png'
+import '../../index.css'
+import logo from '../../shared/images/loudwavelive-logo.png'
 
 function Login() {
   const [email, setEmail] = useState("")

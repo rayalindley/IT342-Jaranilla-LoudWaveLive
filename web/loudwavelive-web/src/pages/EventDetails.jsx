@@ -1,8 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+<<<<<<< Updated upstream:web/loudwavelive-web/src/pages/EventDetails.jsx
 import MainLayout from "../layouts/MainLayout";
 import "../index.css"
+=======
+import MainLayout from "../../shared/layouts/MainLayout";
+import "../../index.css"
+>>>>>>> Stashed changes:web/loudwavelive-web/src/features/event/EventDetails.jsx
 
 function EventDetails() {
     const { id } = useParams();
@@ -16,13 +21,35 @@ function EventDetails() {
             });
     }, []);
 
-    const handlePurchase = async () => {
-        await axios.post("http://localhost:8080/api/tickets", {
-            userId: 1,
-            eventId: event.id
-        });
+    // const handlePurchase = async () => {
+    //     await axios.post("http://localhost:8080/api/tickets", {
+    //         userId: 1,
+    //         eventId: event.id
+    //     });
 
-        alert("You have successfully purchased your ticket!");
+    //     alert("You have successfully purchased your ticket!");
+    // };
+
+    const handlePayment = async () => {
+        try {
+            const token = localStorage.getItem("token");
+
+            const response = await axios.post(
+                "http://localhost:8080/api/payment/create-checkout-session",
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            window.location.href = response.data.url;
+
+        } catch (error) {
+            console.error(error);
+            alert("Payment failed");
+        }
     };
 
     if (!event) return <p> Loading... </p>;
@@ -40,6 +67,7 @@ function EventDetails() {
                     <p><strong>Date:</strong> {new Date(event.date).toLocaleString()}</p>
                     <p><strong>Price:</strong> ₱{event.price}</p>
 
+<<<<<<< Updated upstream:web/loudwavelive-web/src/pages/EventDetails.jsx
                     <div>
                         <button> - </button>
                         <input type="number" id="quantity" value="1"></input>
@@ -47,6 +75,9 @@ function EventDetails() {
                     </div>
 
                     <button className="buy-btn" onClick={handlePurchase}>
+=======
+                    <button className="buy-btn" onClick={handlePayment}>
+>>>>>>> Stashed changes:web/loudwavelive-web/src/features/event/EventDetails.jsx
                         Buy Ticket
                     </button>
                 </div>
