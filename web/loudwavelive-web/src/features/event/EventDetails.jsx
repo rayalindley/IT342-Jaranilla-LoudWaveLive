@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import MainLayout from "../layouts/MainLayout";
+import MainLayout from "../../shared/layouts/MainLayout";
 import "../index.css"
 
 function EventDetails() {

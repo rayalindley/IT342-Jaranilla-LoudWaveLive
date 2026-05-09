@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import MainLayout from "../layouts/MainLayout";
+import MainLayout from "../../shared/layouts/MainLayout";
 import { Link } from "react-router-dom";
 import '../index.css'
 
