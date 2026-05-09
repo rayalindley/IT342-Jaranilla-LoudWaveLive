@@ -44,12 +44,9 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/v1/auth/**").permitAll()
-<<<<<<< Updated upstream
-=======
                 .requestMatchers("/api/events/**").permitAll()
                 .requestMatchers("/api/tickets/**").permitAll()
                 .requestMatchers("/api/payment/**").permitAll()
->>>>>>> Stashed changes
                 .anyRequest().authenticated()
             );
 
