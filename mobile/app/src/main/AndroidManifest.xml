@@ -27,13 +27,13 @@
             android:name=".MainActivity"
             android:exported="false"/>
         <activity
-            android:name=".ui.home.HomeActivity"
+            android:name=".features.home.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.auth.LoginActivity"
+            android:name=".features.auth.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.auth.RegisterActivity"
+            android:name=".features.auth.RegisterActivity"
             android:exported="false" />
 
         <meta-data
