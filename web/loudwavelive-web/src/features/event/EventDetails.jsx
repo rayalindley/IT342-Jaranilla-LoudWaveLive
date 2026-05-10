@@ -16,13 +16,23 @@ function EventDetails() {
             });
     }, []);
 
-    const handlePurchase = async () => {
-        await axios.post("http://localhost:8080/api/tickets", {
-            userId: 1,
-            eventId: event.id
-        });
+    const handlePayment = async () => {
+        try {
+            localStorage.setItem("eventId", event.id);
 
-        alert("You have successfully purchased your ticket!");
+            const response = await axios.post(
+                "http://localhost:8080/api/payment/create-checkout-session",
+                {
+                    userId: 1,
+                    eventId: event.id
+                }
+            );
+
+            window.location.href = response.data.url;
+        } catch (error) {
+            console.error(error);
+            alert("Payment failed");
+        }
     };
 
     if (!event) return <p> Loading... </p>;
@@ -40,7 +50,7 @@ function EventDetails() {
                     <p><strong>Date:</strong> {new Date(event.date).toLocaleString()}</p>
                     <p><strong>Price:</strong> ₱{event.price}</p>
 
-                    <button className="buy-btn" onClick={handlePurchase}>
+                    <button className="buy-btn" onClick={handlePayment}>
                         Buy Ticket
                     </button>
                 </div>

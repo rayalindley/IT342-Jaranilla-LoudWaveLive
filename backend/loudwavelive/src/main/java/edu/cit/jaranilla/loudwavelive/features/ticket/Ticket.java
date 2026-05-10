@@ -16,9 +16,10 @@ import lombok.*;
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     private Long userId;
+
+    private String userEmail;
     private Long eventId;
+    private Integer quantity;
     private LocalDateTime purchasedAt;
 }
