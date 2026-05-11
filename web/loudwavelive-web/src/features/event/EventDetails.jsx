@@ -5,8 +5,10 @@ import MainLayout from "../../shared/layouts/MainLayout";
 import "../../index.css"
 
 function EventDetails() {
+    // const user = JSON.parse(localStorage.getItem("user"));
     const { id } = useParams();
     const [ event, setEvent ] = useState(null);
+    const [ quantity, setQuantity ] = useState(0);
 
     useEffect(() => {
         axios.get(`http://localhost:8080/api/events`)
@@ -16,18 +18,20 @@ function EventDetails() {
             });
     }, []);
 
-    const handlePayment = async () => {
+    const handlePayment = async (ticketTypeId) => {
         try {
-            localStorage.setItem("eventId", event.id);
+            localStorage.setItem("ticketTypeId", ticketTypeId);
+            localStorage.setItem("quantity", quantity);
 
             const response = await axios.post(
                 "http://localhost:8080/api/payment/create-checkout-session",
                 {
-                    userId: 1,
-                    eventId: event.id
+                    ticketTypeId,
+                    quantity
                 }
             );
 
+            // eslint-disable-next-line react-hooks/immutability
             window.location.href = response.data.url;
         } catch (error) {
             console.error(error);
@@ -50,9 +54,32 @@ function EventDetails() {
                     <p><strong>Date:</strong> {new Date(event.date).toLocaleString()}</p>
                     <p><strong>Price:</strong> ₱{event.price}</p>
 
-                    <button className="buy-btn" onClick={handlePayment}>
+                    {event.ticketTypes.map((ticket) => (
+                        <div key={ticket.id}>
+                            <h3>{ticket.name}</h3>
+                            <p>₱{ticket.price}</p>
+
+                            <p>
+                            Remaining:
+                            {ticket.quantityAvailable - ticket.quantitySold}
+                            </p>
+
+                            <input
+                                type="number"
+                                min="1"
+                                value={quantity}
+                                onChange={(e) => setQuantity(e.target.value)}
+                            />
+
+                            <button onClick={() => handlePayment(ticket.id)}>
+                            Buy Ticket
+                            </button>
+                        </div>
+                        ))}
+
+                    {/* <button className="buy-btn" onClick={handlePayment}>
                         Buy Ticket
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </MainLayout>

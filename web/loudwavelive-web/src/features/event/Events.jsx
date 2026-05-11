@@ -30,7 +30,6 @@ function Events() {
                         <p className="date">
                             {new Date(event.date).toLocaleString()}
                         </p>
-                        <p className="price">₱{event.price}</p>
 
                         <button className="buy-btn">
                             <Link to={`/event/${event.id}`}> Buy Ticket </Link>

@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 public class TicketService {
     private final TicketRepository ticketRepository;
 
-    public List<Ticket> getUserTickets(Long userId) {
+    public List<Ticket> getUserTickets(String userId) {
         return ticketRepository.findByUserId(userId);
     }
 }

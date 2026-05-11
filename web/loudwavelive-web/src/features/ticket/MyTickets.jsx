@@ -32,9 +32,9 @@ function MyTickets() {
             {tickets.map((ticket) => (
                 <div className="ticket-card" key={ticket.id}>
                 <h2>Ticket #{ticket.id}</h2>
-                <p>Event ID: {ticket.eventId}</p>
+                <p>Event:  {ticket.ticketType?.event?.title || "Unknown Event"} </p>
                 <p>Quantity: {ticket.quantity}</p>
-                <p>Status: {ticket.status}</p>
+                <p>Status: {ticket.paymentStatus}</p>
                 <p>
                     Purchased:{" "}
                     {new Date(ticket.purchasedAt).toLocaleString()}

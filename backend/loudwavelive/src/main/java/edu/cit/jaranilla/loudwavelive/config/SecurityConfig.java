@@ -43,11 +43,14 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/api/events/**").permitAll()
-                .requestMatchers("/api/tickets/**").permitAll()
-                .requestMatchers("/api/payment/**").permitAll()
-                .anyRequest().authenticated()
+                // .requestMatchers(
+                //     "/api/v1/auth/**",
+                //     "/api/events/**",
+                //     "/api/tickets/**",
+                //     "/api/payment/**",
+                //     "/api/partner/**").permitAll()
+                // .anyRequest().authenticated()
+                .anyRequest().permitAll()
             );
 
         return http.build();
