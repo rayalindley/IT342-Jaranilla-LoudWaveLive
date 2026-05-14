@@ -9,6 +9,7 @@ import Register from "./features/auth/Register";
 import PaymentSuccess from "./features/payment/PaymentSuccess";
 import PaymentCancel from "./features/payment/PaymentCancel";
 import PartnerPage from "./features/organizer/PartnerPage";
+import OrganizerDashboard from "./features/organizer/OrganizerDashboard";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/partner" element={<PartnerPage />} />
+      <Route path="/organizer-dashboard" element={<OrganizerDashboard/>} />
       <Route path="/events" element={<Events />} />
       <Route path="/event/:id" element={<EventDetails />} />
       <Route path="/mytickets" element={<MyTickets />} />

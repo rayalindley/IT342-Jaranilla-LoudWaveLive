@@ -31,6 +31,7 @@ function Header() {
           <>
             {user?.role === "ATTENDEE" && (
               <>
+                <Link to="/partner">Partner</Link>
                 <Link to="/events">Events</Link>
                 <Link to="/mytickets">My Tickets</Link>
 
@@ -47,7 +48,7 @@ function Header() {
 
             {user?.role === "ORGANIZER" && (
               <>
-              <Link to="/organizer">Organizer Dashboard</Link>
+              <Link to="/organizer-dashboard">Organizer Dashboard</Link>
               <button
                   onClick={() => {
                     localStorage.removeItem("user");

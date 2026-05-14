@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import edu.cit.jaranilla.loudwavelive.features.organizer.Organizer;
 import edu.cit.jaranilla.loudwavelive.features.ticket.TicketType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -11,10 +12,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
+@Table(name = "events")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,7 +28,8 @@ import lombok.*;
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long eventId;
+
     private String title;
     private String artist;
     private String venue;
@@ -38,4 +44,8 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<TicketType> ticketTypes;
+
+    @ManyToOne
+    @JoinColumn(name = "organizer_id")
+    private Organizer organizer;
 }

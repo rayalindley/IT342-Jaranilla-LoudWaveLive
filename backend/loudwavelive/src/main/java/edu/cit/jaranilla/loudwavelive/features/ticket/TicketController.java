@@ -10,11 +10,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173")
 public class TicketController {
-
     private final TicketRepository ticketRepository;
 
     @GetMapping("/user/{userId}")
-    public List<Ticket> getUserTickets(@PathVariable String userId) {
-        return ticketRepository.findByUserId(userId);
+    public List<Ticket> getUserTickets(@PathVariable Long userId) {
+        return ticketRepository.findByUserUserId(userId);
     }
 }

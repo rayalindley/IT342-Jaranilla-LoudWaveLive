@@ -5,6 +5,6 @@ import lombok.Data;
 public class PurchaseRequest {
     private Long ticketTypeId;
     private Integer quantity;
-    private String userId;
+    private Long userId;
     private String userEmail;
 }

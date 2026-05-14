@@ -9,8 +9,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173")
 public class EventController {
-
     private final EventService eventService;
+    private final EventRepository eventRepository;
 
     @PostMapping
     public Event createEvent(@RequestBody Event event) {
@@ -20,5 +20,10 @@ public class EventController {
     @GetMapping
     public List<Event> getAllEvents() {
         return eventService.getAllEvents();
+    }
+
+    @GetMapping("/organizer/{organizerId}")
+    public List<Event> getOrganizerEvents(@PathVariable Long organizerId) {
+        return eventRepository.findByOrganizerOrganizerId(organizerId);
     }
 }

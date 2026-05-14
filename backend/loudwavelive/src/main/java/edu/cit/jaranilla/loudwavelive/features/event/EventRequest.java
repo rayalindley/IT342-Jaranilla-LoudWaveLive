@@ -2,7 +2,6 @@ package edu.cit.jaranilla.loudwavelive.features.event;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 import edu.cit.jaranilla.loudwavelive.features.ticket.TicketTypeRequest;
 import lombok.Data;
 

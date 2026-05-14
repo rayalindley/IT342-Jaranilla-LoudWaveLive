@@ -1,9 +1,12 @@
 package edu.cit.jaranilla.loudwavelive.features.ticket;
 import java.time.LocalDateTime;
+
+import edu.cit.jaranilla.loudwavelive.features.auth.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "tickets")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,9 +15,12 @@ import lombok.*;
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long ticketId;
 
-    private String userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private String userEmail;
     private Integer quantity;
     private LocalDateTime purchasedAt;
@@ -25,4 +31,5 @@ public class Ticket {
 
     private Double totalPrice;
     private String paymentStatus;
+    private String ticketCode;
 }

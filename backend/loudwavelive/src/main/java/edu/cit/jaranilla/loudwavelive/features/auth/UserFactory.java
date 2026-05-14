@@ -8,8 +8,8 @@ public class UserFactory {
 
     public User createUser(RegisterRequest request) {
         return User.builder()
-            .firstname(request.getFirstname())
-            .lastname(request.getLastname())
+            .firstName(request.getFirstName())
+            .lastName(request.getLastName())
             .email(request.getEmail())
             .password(encoder.encode(request.getPassword()))
             .role(request.getRole())

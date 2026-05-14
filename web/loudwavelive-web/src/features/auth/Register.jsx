@@ -3,20 +3,26 @@ import axios from "axios"
 
 function Register() {
 
-  const [firstname, setFirstname] = useState("")
-  const [lastname, setLastname] = useState("")
+  const [firstName, setFirstname] = useState("")
+  const [lastName, setLastname] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
 
   const handleRegister = async (e) => {
     e.preventDefault()
+
+    if(password != confirmPassword) {
+      alert("Passwords do not match!")
+      return
+    }
 
     try {
       const res = await axios.post(
         "http://localhost:8080/api/v1/auth/register",
         {
-          firstname,
-          lastname,
+          firstName,
+          lastName,
           email,
           password,
           role: "ATTENDEE"
@@ -41,9 +47,9 @@ function Register() {
 
         <div className="rightDiv" style={{width:'50%'}}>
           <form onSubmit={handleRegister}>
-            <input placeholder="First Name" value={firstname} onChange={(e)=>setFirstname(e.target.value)}/>
+            <input placeholder="First Name" value={firstName} onChange={(e)=>setFirstname(e.target.value)}/>
             <br/>
-            <input placeholder="Last Name" value={lastname} onChange={(e)=>setLastname(e.target.value)}/>
+            <input placeholder="Last Name" value={lastName} onChange={(e)=>setLastname(e.target.value)}/>
             <br/>
             <input placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
 
@@ -54,6 +60,14 @@ function Register() {
               placeholder="Password"
               value={password}
               onChange={(e)=>setPassword(e.target.value)}
+            />
+            
+            <br/>
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
 
             <br/>

@@ -1,7 +1,5 @@
 package edu.cit.jaranilla.loudwavelive.features.ticket;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import edu.cit.jaranilla.loudwavelive.features.event.Event;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,7 +16,7 @@ import lombok.Setter;
 public class TicketType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long ticketTypeId;
 
     private String name;
     private Double price;

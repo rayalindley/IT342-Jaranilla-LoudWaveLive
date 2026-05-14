@@ -12,7 +12,7 @@ import lombok.*;
 public class OrganizerApplication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long applicationId;
     
     private String userId;
     private String fullName;

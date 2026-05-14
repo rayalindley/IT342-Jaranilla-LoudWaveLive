@@ -1,7 +1,6 @@
 package edu.cit.jaranilla.loudwavelive.features.auth;
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -12,16 +11,15 @@ import java.util.UUID;
 @Builder
 public class User {
     @Id
-    @GeneratedValue
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userId;
 
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
 
     @Column(unique = true)
     private String email;
 
     private String password;
-
     private String role;
 }
