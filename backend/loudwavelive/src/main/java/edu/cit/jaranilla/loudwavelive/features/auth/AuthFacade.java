@@ -15,4 +15,8 @@ public class AuthFacade {
     public User loginUser(LoginRequest request) {
         return authService.login(request);
     }
+
+    public boolean adminExists() {
+        return authService.adminExists();
+    }
 }

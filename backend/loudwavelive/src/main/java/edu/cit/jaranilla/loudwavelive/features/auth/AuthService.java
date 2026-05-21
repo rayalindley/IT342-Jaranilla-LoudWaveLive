@@ -30,4 +30,8 @@ public class AuthService {
 
         return user;
     }
+
+    public boolean adminExists() {
+        return userRepository.existsByRole("ADMIN");
+    }
 }

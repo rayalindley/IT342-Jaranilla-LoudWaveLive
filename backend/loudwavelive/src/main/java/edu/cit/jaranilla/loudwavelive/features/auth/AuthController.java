@@ -4,12 +4,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:5174")
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthFacade authFacade;
+    private final UserRepository userRepository;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
@@ -20,5 +21,16 @@ public class AuthController {
     @PostMapping("/login")
     public User login(@RequestBody LoginRequest request) {
         return authFacade.loginUser(request);
+    }
+
+    @GetMapping("/admin-exists")
+    public boolean adminExists() {
+        return authFacade.adminExists();
+    }
+
+    @GetMapping("/user/{userId}")
+    public User getUserById(@PathVariable Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
