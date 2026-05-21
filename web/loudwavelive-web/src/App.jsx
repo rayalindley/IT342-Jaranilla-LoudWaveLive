@@ -10,6 +10,9 @@ import PaymentSuccess from "./features/payment/PaymentSuccess";
 import PaymentCancel from "./features/payment/PaymentCancel";
 import PartnerPage from "./features/organizer/PartnerPage";
 import OrganizerDashboard from "./features/organizer/OrganizerDashboard";
+import CreateEvent from "./features/organizer/CreateEvent";
+import AdminDashboard from "./features/admin/AdminDashboard";
+import ProtectedRoute from "./shared/components/ProtectedRoute";
 
 function App() {
   return (
@@ -18,11 +21,48 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/partner" element={<PartnerPage />} />
-      <Route path="/organizer-dashboard" element={<OrganizerDashboard/>} />
+      <Route
+        path="/organizer-dashboard"
+        element={
+          <ProtectedRoute requiredRole="ORGANIZER">
+            <OrganizerDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/organizer/create-event"
+        element={
+          <ProtectedRoute requiredRole="ORGANIZER">
+            <CreateEvent />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute requiredRole="ADMIN">
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/mytickets"
+        element={
+          <ProtectedRoute>
+            <MyTickets />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/payment-success"
+        element={
+          <ProtectedRoute>
+            <PaymentSuccess />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/events" element={<Events />} />
-      <Route path="/event/:id" element={<EventDetails />} />
-      <Route path="/mytickets" element={<MyTickets />} />
-      <Route path="/payment-success" element={<PaymentSuccess/>} />
+      <Route path="/events/:id" element={<EventDetails />} />
       <Route path="/payment-cancel" element={<PaymentCancel/>} />
     </Routes>
   );

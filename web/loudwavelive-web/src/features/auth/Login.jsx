@@ -21,8 +21,9 @@ function Login() {
       console.log(res.data)
       window.location.href = "/";
     } catch (error) {
-      alert("Invalid credentials")
-      console.error(error)
+      const message = error?.response?.data?.message || error.message || "Login failed";
+      alert(`Login failed: ${message}`);
+      console.error(error);
     }
   }
 
