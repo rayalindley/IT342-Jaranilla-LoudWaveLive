@@ -42,7 +42,6 @@ public class Event {
     private String status;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<TicketType> ticketTypes;
 
     @ManyToOne
