@@ -20,7 +20,6 @@ public class OrganizerService {
         userRepository.save(user);
 
         organizer.setUser(user);
-        organizer.setVerificationStatus("APPROVED");
         organizer.setCreatedAt(LocalDateTime.now());
 
         return organizerRepository.save(organizer);

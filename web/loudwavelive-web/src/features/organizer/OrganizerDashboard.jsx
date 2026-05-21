@@ -11,13 +11,17 @@ function OrganizerDashboard() {
         JSON.parse(localStorage.getItem("user"));
 
     useEffect(() => {
-
         if (!user) return;
 
+        const userId = user.userId ?? user.id;
+        if (!userId) return;
+
         axios
-            .get(
-                `http://localhost:8080/api/events/organizer/${user.userId}`
-            )
+            .get(`http://localhost:8080/api/organizers/user/${userId}`)
+            .then((res) => {
+                const organizer = res.data;
+                return axios.get(`http://localhost:8080/api/events/organizer/${organizer.organizerId}`);
+            })
             .then((res) => {
                 setEvents(res.data);
             })

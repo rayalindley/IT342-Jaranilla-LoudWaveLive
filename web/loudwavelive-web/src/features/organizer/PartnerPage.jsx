@@ -5,7 +5,7 @@ import MainLayout from "../../shared/layouts/MainLayout";
 
 function PartnerPage() {
   
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user") || "null");
     console.log("User", user);
 
   const [formData, setFormData] = useState({
@@ -30,7 +30,7 @@ function PartnerPage() {
 
     try {
       await axios.post("http://localhost:8080/api/partner/apply", {
-        userId: user.id,
+        userId: user?.userId ?? user?.id,
         ...formData
       });
 
