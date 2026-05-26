@@ -1,5 +1,8 @@
 package edu.cit.jaranilla.loudwavelive.features.auth;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,5 +35,24 @@ public class AuthController {
     public User getUserById(@PathVariable Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @PostMapping("/google")
+    public User googleLogin(@RequestBody GoogleAuthRequest request) {
+        Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
+        
+        if(existingUser.isPresent()) {
+            return existingUser.get();
+        }
+
+        User user = User.builder()
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .email(request.getEmail())
+                .password("")
+                .role("ATTENDEE")
+                .build();
+
+        return userRepository.save(user);
     }
 }

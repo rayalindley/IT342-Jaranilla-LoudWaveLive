@@ -31,10 +31,6 @@ function Header() {
           </>
         ) : (
           <>
-            <Link to="/profile" className="profile-link">
-              <span className="profile-avatar-mini">{displayName?.charAt(0).toUpperCase()}</span>
-              {displayName || "Profile"}
-            </Link>
 
             {user?.role === "ATTENDEE" && (
               <>
@@ -42,14 +38,14 @@ function Header() {
                 <Link to="/events">Events</Link>
                 <Link to="/my-tickets">My Tickets</Link>
 
-                <button
+                {/* <button
                   onClick={() => {
                     localStorage.removeItem("user");
                     window.location.href = "/";
                   }}
                 >
                   Logout
-                </button>
+                </button> */}
               </>
             )}
 
@@ -70,16 +66,22 @@ function Header() {
             {user?.role === "ADMIN" && (
               <>
                 <Link to="/admin">Admin Dashboard</Link>
-                <button
+                {/* <button
                   onClick={() => {
                     localStorage.removeItem("user");
                     window.location.href = "/";
                   }}
                 >
                   Logout
-                </button>
+                </button> */}
               </>
             )}
+
+            
+            <Link to="/profile" className="profile-link">
+              <span className="profile-avatar-mini">{displayName?.charAt(0).toUpperCase()}</span>
+              {/* {displayName || "Profile"} */}
+            </Link>
           </>
         )}
       </div>

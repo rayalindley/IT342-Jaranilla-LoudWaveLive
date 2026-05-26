@@ -1,105 +1,30 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { isValidCloudinaryUrl } from "../../../shared/utils/cloudinary";
 import "../../../styles/poster-upload.css";
 
 const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
 
 function PosterUpload({ imageUrl, setImageUrl, onUploadStart, onUploadEnd }) {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [previewUrl, setPreviewUrl] = useState(imageUrl || "");
-  const widgetRef = useRef(null);
-  const scriptLoadedRef = useRef(false);
+  const fileInputRef = useRef(null);
 
-  // Load Cloudinary widget script
-  useEffect(() => {
-    if (scriptLoadedRef.current || window.cloudinary) {
-      console.log("Cloudinary widget already loaded");
+  const handleFileSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file
+    const validTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    if (!validTypes.includes(file.type)) {
+      setUploadError("Only JPG, PNG, WebP, and GIF files are allowed.");
       return;
     }
 
-    // Use the proper Cloudinary upload widget CDN URL
-    const cdnUrls = [
-      "https://upload-widget.cloudinary.com/latest/index.js",
-      "https://cdn.jsdelivr.net/npm/cloudinary-upload-widget@2.2.0/index.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/cloudinary-upload-widget/2.2.0/index.min.js"
-    ];
-
-    let scriptLoaded = false;
-    let currentUrlIndex = 0;
-
-    const tryLoadScript = (urlIndex) => {
-      if (urlIndex >= cdnUrls.length) {
-        console.error("Failed to load Cloudinary from all CDN URLs");
-        setUploadError("Failed to load upload widget from all sources. Please check your internet connection and refresh the page.");
-        return;
-      }
-
-      const script = document.createElement("script");
-      script.src = cdnUrls[urlIndex];
-      script.async = true;
-      script.type = "text/javascript";
-      script.crossOrigin = "anonymous";
-
-      script.onload = () => {
-        console.log(`Cloudinary loaded from: ${cdnUrls[urlIndex]}`);
-        
-        // Verify the upload widget is available
-        if (window.cloudinary && typeof window.cloudinary.openUploadWidget === 'function') {
-          scriptLoadedRef.current = true;
-          scriptLoaded = true;
-          setUploadError(""); // Clear any previous errors
-        } else {
-          console.warn("Script loaded but openUploadWidget not available, trying next URL...");
-          if (!scriptLoaded) {
-            tryLoadScript(urlIndex + 1);
-          }
-        }
-      };
-
-      script.onerror = (error) => {
-        console.warn(`Failed to load from ${cdnUrls[urlIndex]}:`, error);
-        if (!scriptLoaded) {
-          tryLoadScript(urlIndex + 1);
-        }
-      };
-
-      document.head.appendChild(script);
-
-      // Timeout after 10 seconds per URL
-      setTimeout(() => {
-        if (!scriptLoaded && !scriptLoadedRef.current) {
-          if (!window.cloudinary || typeof window.cloudinary.openUploadWidget !== 'function') {
-            console.warn(`Timeout loading from ${cdnUrls[urlIndex]}, trying next URL...`);
-            tryLoadScript(urlIndex + 1);
-          }
-        }
-      }, 10000);
-    };
-
-    tryLoadScript(0);
-  }, []);
-
-  const handleUploadClick = () => {
-    // Validate configuration
-    if (!cloudName || !uploadPreset) {
-      setUploadError("Cloudinary configuration incomplete. Please check your .env file.");
-      console.error("Missing Cloudinary credentials:", { cloudName, uploadPreset });
-      return;
-    }
-
-    // Check if Cloudinary is loaded
-    if (!window.cloudinary) {
-      setUploadError("Upload widget is loading. Please wait a moment and try again.");
-      console.error("window.cloudinary not available yet");
-      return;
-    }
-
-    // Check if openUploadWidget is available
-    if (typeof window.cloudinary.openUploadWidget !== 'function') {
-      setUploadError("Upload widget not properly loaded. Please refresh the page.");
-      console.error("window.cloudinary.openUploadWidget is not a function");
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadError("File size must be less than 10MB.");
       return;
     }
 
@@ -111,74 +36,48 @@ function PosterUpload({ imageUrl, setImageUrl, onUploadStart, onUploadEnd }) {
     }
 
     try {
-      window.cloudinary.openUploadWidget(
-        {
-          cloudName: cloudName,
-          uploadPreset: uploadPreset,
-          folder: "loudwavelive/posters",
-          resourceType: "image",
-          multiple: false,
-          maxFileSize: 10000000, // 10MB
-          maxFiles: 1,
-          clientAllowedFormats: ["jpg", "jpeg", "png", "webp", "gif"],
-          showAdvancedOptions: false,
-          cropping: true,
-          croppingAspectRatio: 1.5,
-          defaultSource: "local",
-          showPoweredBy: false,
-          theme: "light",
-          styles: {
-            palette: {
-              window: "#ffffff",
-              windowBorder: "#90a0b0",
-              tabIcon: "#0078d4",
-              menuIcons: "#5a6c7d",
-              textDark: "#000000",
-              textLight: "#ffffff",
-              link: "#0078d4",
-              action: "#ff620d",
-              inactiveButtonBorder: "#3b4049",
-              error: "#ff0000",
-              inProgress: "#0078d4",
-              complete: "#20b44b",
-              sourceBg: "#e7e7e7"
-            }
-          }
-        },
-        (error, result) => {
-          if (error) {
-            console.error("Upload error:", error);
-            setUploadError(error?.message || "Upload failed. Please try again.");
-            setIsUploading(false);
-            if (onUploadEnd) {
-              onUploadEnd(null);
-            }
-            return;
-          }
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", uploadPreset);
+      formData.append("folder", "loudwavelive/posters");
 
-          if (result?.event === "success") {
-            console.log("Upload successful:", result.info);
-            const secureUrl = result.info.secure_url;
-            setImageUrl(secureUrl);
-            setPreviewUrl(secureUrl);
-            setUploadError("");
-            setIsUploading(false);
-            if (onUploadEnd) {
-              onUploadEnd(secureUrl);
-            }
-          } else if (result?.event === "close") {
-            setIsUploading(false);
-          } else if (result?.event === "abort") {
-            setIsUploading(false);
-          }
-        }
-      ).open();
-    } catch (err) {
-      console.error("Error opening upload widget:", err);
-      setUploadError("Failed to open upload widget. Please refresh the page.");
-      setIsUploading(false);
+      console.log("Uploading to Cloudinary...");
+      const response = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: "POST",
+        body: formData
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.error?.message || `Upload failed with status ${response.status}`
+        );
+      }
+
+      const data = await response.json();
+      console.log("Upload successful:", data);
+
+      const secureUrl = data.secure_url;
+      setImageUrl(secureUrl);
+      setPreviewUrl(secureUrl);
+      setUploadError("");
+
+      if (onUploadEnd) {
+        onUploadEnd(secureUrl);
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      setUploadError(
+        error.message || "Upload failed. Please check your configuration and try again."
+      );
       if (onUploadEnd) {
         onUploadEnd(null);
+      }
+    } finally {
+      setIsUploading(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
       }
     }
   };
@@ -187,6 +86,9 @@ function PosterUpload({ imageUrl, setImageUrl, onUploadStart, onUploadEnd }) {
     setImageUrl("");
     setPreviewUrl("");
     setUploadError("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   return (
@@ -204,7 +106,7 @@ function PosterUpload({ imageUrl, setImageUrl, onUploadStart, onUploadEnd }) {
             <button
               type="button"
               className="change-poster-btn"
-              onClick={handleUploadClick}
+              onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
             >
               {isUploading ? "Uploading..." : "Change Poster"}
@@ -223,7 +125,7 @@ function PosterUpload({ imageUrl, setImageUrl, onUploadStart, onUploadEnd }) {
             <button
               type="button"
               className="upload-poster-btn"
-              onClick={handleUploadClick}
+              onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
             >
               {isUploading ? (
@@ -255,6 +157,15 @@ function PosterUpload({ imageUrl, setImageUrl, onUploadStart, onUploadEnd }) {
             <p className="upload-hint">
               JPG, PNG, WebP, or GIF (Max 10MB)
             </p>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              onChange={handleFileSelect}
+              disabled={isUploading}
+              style={{ display: "none" }}
+            />
           </div>
         )}
       </div>
