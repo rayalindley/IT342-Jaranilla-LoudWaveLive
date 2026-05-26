@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/organizers")
@@ -46,4 +47,9 @@ public class OrganizerController {
         User user = userRepository.findById(userId).orElseThrow();
         return organizerRepository.findByUser(user).orElseThrow(() -> new RuntimeException("Organizer profile not found"));
     }
+
+        @GetMapping
+        public List<Organizer> getAllOrganizers() {
+                return organizerRepository.findAll();
+        }
 }

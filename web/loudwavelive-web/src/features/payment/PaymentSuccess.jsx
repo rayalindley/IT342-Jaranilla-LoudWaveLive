@@ -17,9 +17,10 @@ function PaymentSuccess() {
                 const ticketTypeId = parseInt(localStorage.getItem("ticketTypeId")) || null;
                 const quantity = parseInt(localStorage.getItem("quantity")) || 1;
                 const userId = user?.userId ?? user?.id;
+                const userEmail = user?.email;
                 const sessionId = searchParams.get("session_id");
 
-                console.log("Confirming payment with:", { ticketTypeId, quantity, userId, sessionId });
+                console.log("Confirming payment with:", { ticketTypeId, quantity, userId, userEmail, sessionId });
 
                 if (!ticketTypeId || !userId) {
                     setError("Invalid payment data. Please try again.");
@@ -33,6 +34,7 @@ function PaymentSuccess() {
                         ticketTypeId,
                         quantity,
                         userId,
+                        userEmail,
                         sessionId,
                     }
                 );

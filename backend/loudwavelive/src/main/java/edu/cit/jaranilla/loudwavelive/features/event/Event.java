@@ -2,7 +2,7 @@ package edu.cit.jaranilla.loudwavelive.features.event;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import edu.cit.jaranilla.loudwavelive.features.organizer.Organizer;
 import edu.cit.jaranilla.loudwavelive.features.ticket.TicketType;
@@ -42,6 +42,7 @@ public class Event {
     private String status;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<TicketType> ticketTypes;
 
     @ManyToOne

@@ -1,22 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 function ProtectedRoute({ children, requiredRole }) {
-  const storedUser = JSON.parse(localStorage.getItem("user") || "null");
+  const storedUser = useMemo(() => JSON.parse(localStorage.getItem("user") || "null"), []);
   const [user, setUser] = useState(storedUser);
-  const [loading, setLoading] = useState(Boolean(storedUser));
+  const [loading, setLoading] = useState(Boolean(storedUser?.userId ?? storedUser?.id));
   const location = useLocation();
 
   useEffect(() => {
-    if (!storedUser) {
-      setLoading(false);
-      return;
-    }
-
-    const userId = storedUser.userId ?? storedUser.id;
+    const userId = storedUser?.userId ?? storedUser?.id;
     if (!userId) {
-      setLoading(false);
       return;
     }
 

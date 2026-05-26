@@ -1,6 +1,7 @@
 package edu.cit.jaranilla.loudwavelive.features.event;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import edu.cit.jaranilla.loudwavelive.features.organizer.Organizer;
@@ -60,11 +61,32 @@ public class EventController {
     }
 
     @GetMapping
+    @Transactional(readOnly = true)
     public List<Event> getAllEvents() {
         return eventRepository.findByStatus("APPROVED");
     }
 
+    @GetMapping("/pending")
+    @Transactional(readOnly = true)
+    public List<Event> getPendingEvents() {
+        return eventRepository.findByStatus("PENDING");
+    }
+
+    @PostMapping("/{eventId}/approve")
+    public Event approveEvent(@PathVariable Long eventId) {
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found"));
+        event.setStatus("APPROVED");
+        return eventRepository.save(event);
+    }
+
+    @GetMapping("/all")
+    @Transactional(readOnly = true)
+    public List<Event> getAllEventsAdmin() {
+        return eventRepository.findAll();
+    }
+
     @GetMapping("/organizer/{organizerId}")
+    @Transactional(readOnly = true)
     public List<Event> getOrganizerEvents(@PathVariable Long organizerId) {
         return eventRepository.findByOrganizerOrganizerId(organizerId);
     }

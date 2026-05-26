@@ -1,8 +1,11 @@
 package edu.cit.jaranilla.loudwavelive.features.ticket;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import edu.cit.jaranilla.loudwavelive.features.event.Event;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -14,6 +17,8 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class TicketType {
     @Id
@@ -27,5 +32,6 @@ public class TicketType {
 
     @ManyToOne
     @JoinColumn(name = "event_id")
+    @JsonBackReference
     private Event event;
 }

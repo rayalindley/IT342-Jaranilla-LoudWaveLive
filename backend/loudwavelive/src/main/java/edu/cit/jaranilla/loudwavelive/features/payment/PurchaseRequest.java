@@ -7,4 +7,5 @@ public class PurchaseRequest {
     private Integer quantity;
     private Long userId;
     private String userEmail;
+    private String sessionId;
 }
