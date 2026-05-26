@@ -1,67 +1,59 @@
-import { useState } from "react"
-import axios from "axios"
-import '../../index.css'
-import logo from '../../shared/images/loudwavelive-logo.png'
+import { useState } from "react";
+import axios from "axios";
+import "../../styles/global.css";
+import "../../styles/auth.css";
+import logo from "../../shared/images/loudwavelive-logo.png";
 
 function Login() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-      const res = await axios.post(
-        "http://localhost:8080/api/v1/auth/login",
-        { email, password }
-      )
-
+      const res = await axios.post("http://localhost:8080/api/v1/auth/login", { email, password });
       localStorage.setItem("user", JSON.stringify(res.data));
-      alert("Login successful!")
-      console.log(res.data)
+      alert("Login successful!");
       window.location.href = "/";
     } catch (error) {
       const message = error?.response?.data?.message || error.message || "Login failed";
       alert(`Login failed: ${message}`);
       console.error(error);
     }
-  }
+  };
 
   return (
-    <div className="login-page">
-      {/* Left column */}
-      <div className="login-left">
-        <img src={logo} alt="LoudWave Live Logo" className="logo-m" />
-        <h1>LoudWave Live</h1>
-        <p>Concerts & Live Events Made Easy</p>
-      </div>
+    <div className="auth-page">
+      <section className="auth-brand">
+        <img src={logo} alt="LoudWave Live Logo" />
+        <p className="eyebrow">LoudWave Live</p>
+        <h1>Step inside the control room for premium live events.</h1>
+        <p>Sign in to manage tickets, discover shows, and keep every event moment close.</p>
+      </section>
 
-      {/* Right column */}
-      <div className="login-right">
-        <form onSubmit={handleLogin}>
+      <section className="auth-panel">
+        <form className="auth-form" onSubmit={handleLogin}>
+          <p className="eyebrow">Welcome back</p>
           <h2>Login</h2>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e)=>setEmail(e.target.value)}
-          />
+          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           <input
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e)=>setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
-          <button type="submit">Login</button>
-
-          {/* Register link */}
-          <p className="register-link">
+          <button className="auth-submit" type="submit">
+            Login
+          </button>
+          <p className="auth-link">
             Don't have an account? <a href="/register">Register</a>
           </p>
         </form>
-      </div>
+      </section>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

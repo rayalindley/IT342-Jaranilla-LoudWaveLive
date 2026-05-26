@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import logo from "../images/loudwavelive-logo.png";
-import "../../index.css";
+import "../../styles/global.css";
+import "../../styles/header.css";
 
 function Header() {
   const user = JSON.parse(localStorage.getItem("user") || "null");
-  console.log(user?.role); // safe
+
+  const displayName = user?.firstName ? `${user.firstName} ${user.lastName ?? ""}`.trim() : user?.email;
 
   return (
     <header>
@@ -29,11 +31,16 @@ function Header() {
           </>
         ) : (
           <>
+            <Link to="/profile" className="profile-link">
+              <span className="profile-avatar-mini">{displayName?.charAt(0).toUpperCase()}</span>
+              {displayName || "Profile"}
+            </Link>
+
             {user?.role === "ATTENDEE" && (
               <>
                 <Link to="/partner">Partner</Link>
                 <Link to="/events">Events</Link>
-                <Link to="/mytickets">My Tickets</Link>
+                <Link to="/my-tickets">My Tickets</Link>
 
                 <button
                   onClick={() => {
@@ -48,8 +55,8 @@ function Header() {
 
             {user?.role === "ORGANIZER" && (
               <>
-              <Link to="/organizer-dashboard">Organizer Dashboard</Link>
-              <button
+                <Link to="/organizer-dashboard">Organizer Dashboard</Link>
+                <button
                   onClick={() => {
                     localStorage.removeItem("user");
                     window.location.href = "/";
@@ -61,7 +68,17 @@ function Header() {
             )}
 
             {user?.role === "ADMIN" && (
-              <Link to="/admin">Admin Dashboard</Link>
+              <>
+                <Link to="/admin">Admin Dashboard</Link>
+                <button
+                  onClick={() => {
+                    localStorage.removeItem("user");
+                    window.location.href = "/";
+                  }}
+                >
+                  Logout
+                </button>
+              </>
             )}
           </>
         )}

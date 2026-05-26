@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "../../index.css";
+import "../../styles/global.css";
+import "../../styles/tickets.css";
 import MainLayout from "../../shared/layouts/MainLayout";
 
 function MyTickets() {
@@ -10,19 +11,29 @@ function MyTickets() {
   useEffect(() => {
     if (!user) return;
 
+    const userId = user.userId ?? user.id;
+    if (!userId) return;
+
     axios
-      .get(`http://localhost:8080/api/tickets/user/${user.id}`)
+      .get(`http://localhost:8080/api/tickets/user/${userId}`)
       .then((res) => setTickets(res.data))
       .catch((err) => console.error(err));
-  }, []);
+  }, [user]);
 
   if (!user) {
-    return <h2>Please login first.</h2>;
+    return (
+      <MainLayout>
+        <div className="tickets-page">
+          <div className="table-empty-state">Please login first.</div>
+        </div>
+      </MainLayout>
+    );
   }
 
   return (
     <MainLayout>
         <div className="tickets-page">
+        <p className="eyebrow">Ticket wallet</p>
         <h1>My Tickets</h1>
 
         {tickets.length === 0 ? (
@@ -30,9 +41,9 @@ function MyTickets() {
         ) : (
             <div className="ticket-list">
             {tickets.map((ticket) => (
-                <div className="ticket-card" key={ticket.id}>
-                <h2>Ticket #{ticket.id}</h2>
-                <p>Event:  {ticket.ticketType?.event?.title || "Unknown Event"} </p>
+                <div className="ticket-card" key={ticket.ticketId}>
+                <h2>Ticket #{ticket.ticketId}</h2>
+                <p>Event: {ticket.ticketType?.event?.title || "Unknown Event"} </p>
                 <p>Quantity: {ticket.quantity}</p>
                 <p>Status: {ticket.paymentStatus}</p>
                 <p>

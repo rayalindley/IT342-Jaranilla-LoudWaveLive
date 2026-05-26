@@ -12,6 +12,7 @@ import PartnerPage from "./features/organizer/PartnerPage";
 import OrganizerDashboard from "./features/organizer/OrganizerDashboard";
 import CreateEvent from "./features/organizer/CreateEvent";
 import AdminDashboard from "./features/admin/AdminDashboard";
+import ProfilePage from "./features/profile/ProfilePage";
 import ProtectedRoute from "./shared/components/ProtectedRoute";
 
 function App() {
@@ -46,7 +47,15 @@ function App() {
         }
       />
       <Route
-        path="/mytickets"
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/my-tickets"
         element={
           <ProtectedRoute>
             <MyTickets />

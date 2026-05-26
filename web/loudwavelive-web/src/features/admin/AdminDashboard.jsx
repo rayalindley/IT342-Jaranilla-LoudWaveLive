@@ -1,137 +1,104 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import MainLayout from "../../shared/layouts/MainLayout";
+import AdminOrganizers from "./AdminOrganizers";
+import AdminApplications from "./AdminApplications";
+import AdminEvents from "./AdminEvents";
+import AdminSideNav from "./AdminSideNav";
+import axios from "axios";
+import "../../styles/global.css";
+import "../../styles/admin.css";
 
 function AdminDashboard() {
-  const [applications, setApplications] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [active, setActive] = useState("dashboard");
+  const [stats, setStats] = useState({ applications: 0, pending: 0, approved: 0, organizers: 0, pendingEvents: 0 });
   const [error, setError] = useState(null);
 
-  const fetchApplications = async () => {
-    setLoading(true);
+  const fetchStats = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/partner/applications");
-      setApplications(response.data || []);
       setError(null);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to load organizer applications.");
-    } finally {
-      setLoading(false);
-    }
-  };
+      const [appsRes, organizersRes, eventsRes] = await Promise.all([
+        axios.get("http://localhost:8080/api/partner/applications"),
+        axios.get("http://localhost:8080/api/organizers"),
+        axios.get("http://localhost:8080/api/events/pending"),
+      ]);
 
-  const handleApprove = async (applicationId) => {
-    try {
-      await axios.post(
-        `http://localhost:8080/api/partner/applications/${applicationId}/approve`
-      );
-      setApplications((prev) =>
-        prev.map((application) =>
-          application.applicationId === applicationId
-            ? { ...application, status: "APPROVED" }
-            : application
-        )
-      );
-      alert("Application approved and user updated to ORGANIZER.");
+      const applications = appsRes.data || [];
+      const pending = applications.filter((a) => a.status === "PENDING").length;
+      const approved = applications.filter((a) => a.status === "APPROVED").length;
+      const events = eventsRes.data || [];
+
+      setStats({
+        applications: applications.length,
+        pending,
+        approved,
+        organizers: (organizersRes.data || []).length,
+        pendingEvents: events.length,
+      });
     } catch (err) {
-      console.error(err);
-      alert("Unable to approve application. Check the backend logs.");
+      console.error("Failed to load admin stats", err);
+      setError(err?.response?.data || err.message || "Failed to fetch stats");
     }
   };
 
   useEffect(() => {
-    fetchApplications();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchStats();
   }, []);
-
-  const pendingCount = applications.filter((application) => application.status === "PENDING").length;
-  const approvedCount = applications.filter((application) => application.status === "APPROVED").length;
 
   return (
     <MainLayout>
-      <div className="page-shell">
-        <div className="admin-dashboard-page">
-          <div className="dashboard-hero">
-          <div>
-            <p className="eyebrow">Admin Dashboard</p>
-            <h1>Organizer Application Review</h1>
-            <p className="hero-copy">
-              Approve partnership applications, manage organizer onboarding, and monitor the current application flow.
-            </p>
+      <div className="page-shell admin-shell">
+        <div>
+          <div className="admin-dashboard-header">
+            <div>
+              <p className="eyebrow">Admin Dashboard</p>
+              <h1>Overview</h1>
+              <p className="subhead">Manage organizers, pending events, and partnerships from one polished workspace.</p>
+            </div>
+            <div className="admin-header-actions">
+              <button onClick={fetchStats} className="refresh-btn">
+                Refresh data
+              </button>
+            </div>
           </div>
 
-          <button className="refresh-btn" type="button" onClick={fetchApplications}>
-            Refresh applications
-          </button>
-        </div>
-
-        <div className="dashboard-summary">
-          <div className="summary-card">
-            <span>Total applications</span>
-            <strong>{applications.length}</strong>
-          </div>
-          <div className="summary-card">
-            <span>Pending approvals</span>
-            <strong>{pendingCount}</strong>
-          </div>
-          <div className="summary-card">
-            <span>Approved organizers</span>
-            <strong>{approvedCount}</strong>
-          </div>
-        </div>
-
-        <div className="table-card">
-          {loading ? (
-            <div className="table-empty-state">Loading applications…</div>
-          ) : error ? (
-            <div className="table-empty-state error-message">{error}</div>
-          ) : applications.length === 0 ? (
-            <div className="table-empty-state">No partnership applications found.</div>
-          ) : (
-            <table className="admin-applications-table">
-              <thead>
-                <tr>
-                  <th>Applicant</th>
-                  <th>Company</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {applications.map((application) => (
-                  <tr key={application.applicationId}>
-                    <td>{application.fullName}</td>
-                    <td>{application.companyName}</td>
-                    <td>{application.businessEmail}</td>
-                    <td>{application.contactNumber}</td>
-                    <td>
-                      <span className={`status-pill ${application.status.toLowerCase()}`}>
-                        {application.status}
-                      </span>
-                    </td>
-                    <td>
-                      {application.status === "PENDING" ? (
-                        <button
-                          type="button"
-                          className="approve-btn"
-                          onClick={() => handleApprove(application.applicationId)}
-                        >
-                          Approve
-                        </button>
-                      ) : (
-                        <span className="approved-label">Approved</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          {active === "dashboard" && (
+            <div>
+              <div className="dashboard-summary">
+                <div className="summary-card">
+                  <span>Total applications</span>
+                  <strong>{stats.applications}</strong>
+                </div>
+                <div className="summary-card">
+                  <span>Pending approvals</span>
+                  <strong>{stats.pending}</strong>
+                </div>
+                <div className="summary-card">
+                  <span>Approved organizers</span>
+                  <strong>{stats.approved}</strong>
+                </div>
+                <div className="summary-card">
+                  <span>Organizers</span>
+                  <strong>{stats.organizers}</strong>
+                </div>
+                <div className="summary-card">
+                  <span>Pending events</span>
+                  <strong>{stats.pendingEvents}</strong>
+                </div>
+              </div>
+              {error && <div className="status-pill error">{`Error loading stats: ${error}`}</div>}
+            </div>
           )}
+
+          {active === "organizers" && <AdminOrganizers />}
+          {active === "applications" && <AdminApplications onAction={fetchStats} />}
+          {active === "events" && <AdminEvents onAction={fetchStats} />}
         </div>
+
+        <aside>
+          <AdminSideNav active={active} onSelect={setActive} />
+        </aside>
       </div>
-    </div>
     </MainLayout>
   );
 }

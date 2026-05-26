@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import MainLayout from "../../shared/layouts/MainLayout";
 import { Link } from "react-router-dom";
-import '../../index.css'
+import '../../styles/global.css'
+import '../../styles/event.css'
+
+const fallbackImage =
+    "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80";
 
 function Events() {
     const [ events, setEvents ] = useState([]);
@@ -17,12 +21,13 @@ function Events() {
         <>
         <MainLayout>
             <div className="events-container">
+                <p className="eyebrow">Event marketplace</p>
                 <h1 className="title">Explore Events</h1>
 
                 <div className="events-grid">
                     {events.map(event => (
-                    <div className="event-card" key={event.id}>
-                        <img src={event.imageUrl} alt={event.title} className="event-image" />
+                    <article className="event-card" key={event.eventId}>
+                        <img src={event.imageUrl || fallbackImage} alt={event.title} className="event-image" />
 
                         <div className="event-info">
                         <h2>{event.title}</h2>
@@ -31,12 +36,10 @@ function Events() {
                             {new Date(event.date).toLocaleString()}
                         </p>
 
-                        <button className="buy-btn">
-                            <Link to={`/event/${event.id}`}> Buy Ticket </Link>
-                        </button>
+                        <Link className="buy-btn" to={`/events/${event.eventId}`}>Buy Ticket</Link>
                         </div>
 
-                    </div>
+                    </article>
                     ))}
                 </div>
                 </div>

@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import MainLayout from "../../shared/layouts/MainLayout";
-import "../../index.css";
+import PosterUpload from "./components/PosterUpload";
+import "../../styles/global.css";
+import "../../styles/organizer.css";
 
 function CreateEvent() {
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const user = useMemo(() => JSON.parse(localStorage.getItem("user") || "null"), []);
     const [organizerId, setOrganizerId] = useState(null);
     const [loadingOrganizer, setLoadingOrganizer] = useState(true);
     const [message, setMessage] = useState("");
@@ -50,7 +52,7 @@ function CreateEvent() {
         };
 
         fetchOrganizer();
-    }, []);
+    }, [user]);
 
     const handleTicketChange = (index, field, value) => {
         const updatedTickets = [...ticketTypes];
@@ -210,17 +212,10 @@ function CreateEvent() {
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label> Poster Image URL </label>
-
-                            <input
-                                type="text"
-                                value={imageUrl}
-                                onChange={(e) => setImageUrl(e.target.value)}
-                                placeholder="https://..."
-                                required
-                            />
-                        </div>
+                        <PosterUpload
+                            imageUrl={imageUrl}
+                            setImageUrl={setImageUrl}
+                        />
 
                         <div className="ticket-section">
                             <h2> Ticket Types </h2>
