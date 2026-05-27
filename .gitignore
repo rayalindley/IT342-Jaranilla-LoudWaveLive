@@ -1,0 +1,5 @@
+CLOUDINARY_QUICK_FIX.md
+CLOUDINARY_SETUP.md
+backend/loudwavelive/src/main/resources/application.properties
+web/loudwavelive/.env
+web/loudwavelive/.env.example
